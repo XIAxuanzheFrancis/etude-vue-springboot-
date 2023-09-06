@@ -13,8 +13,8 @@
     </el-table>
   </div>
 
-  <el-dialog v-model="dialogFormVisible" title="informations personelles">
-    <el-form :model="form" label-width="120px">
+  <el-dialog v-model="dialogFormVisible" title="informations personelles" width = "40%">
+    <el-form :model="form" label-width="120px" style="padding-right: 50px">
       <el-form-item label="Date">
         <el-input v-model="form.date" autocomplete="off" />
       </el-form-item>
@@ -30,7 +30,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">
+        <el-button type="primary" @click="save">
           Confirm
         </el-button>
       </span>
@@ -41,7 +41,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 
-const tableData = [
+const tableData = reactive([
   {
     date: "2016-05-03",
     name: "Tom",
@@ -57,12 +57,18 @@ const tableData = [
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles",
   },
-];
+])
 
 const form = reactive({
+
 });
 
 const dialogFormVisible = ref(false);
+const save = () => {  
+  tableData.push(form)
+  dialogFormVisible = false
+}
+
 </script>
 
 <style>
