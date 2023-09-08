@@ -1,5 +1,7 @@
 <template>
   <div style="padding: 10px">
+    <el-input style="width: 300px" placeholder="Please enter a name" v-model="name" clearable></el-input>
+    <el-button type="primary" @click="search" style ="margin-left: 5px; margin-right: 1px">Search</el-button>
     <el-button type="primary" @click="HandleAdd">Add data</el-button>
   </div>
 
@@ -66,6 +68,7 @@ const tableData = reactive([
 let form = reactive({})
 const globalIndex = ref(-1)
 const dialogFormVisible = ref(false)
+const name = ref('')
 
 const save = () => {
   if(globalIndex.value>=0){
@@ -93,6 +96,11 @@ const handleEdit = (row, index) => {
   dialogFormVisible.value = true
 }
 
+const search = () => {
+  const filteredData = tableData.filter(v => v.name.includes(name.value))
+  tableData.length = 0
+  tableData.push(...filteredData)
+}
 
 </script>
 
