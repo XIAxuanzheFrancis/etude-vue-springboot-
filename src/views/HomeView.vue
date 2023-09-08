@@ -1,15 +1,19 @@
 <template>
   <div style="padding: 10px">
-    <el-button type="primary" @click="dialogFormVisible = true"
-      >Add data</el-button
-    >
+    <el-button type="primary" @click="HandleAdd">Add data</el-button>
   </div>
 
   <div style="margin: 10px 0">
     <el-table :data="tableData" style="width: 100%">
       <el-table-column prop="date" label="Date" width="180" align="center" />
       <el-table-column prop="name" label="Name" width="180" align="center" />
-      <el-table-column prop="address" label="Address" />
+      <el-table-column prop="address" label="Address" width="180" align="center"/>
+      <el-table-column label="Action" width="180" align="center">
+       <template #default="scope">
+        <el-button link type="primary" size="small" @click="handleEdit(scope.row, scope.$index)">Edit</el-button>
+        <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.$index)">Delete</el-button>
+      </template>
+      </el-table-column>
     </el-table>
   </div>
 
@@ -20,7 +24,7 @@
       </el-form-item>
 
       <el-form-item label="Name">
-        <el-input v-model="form.date" autocomplete="off" />
+        <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>
 
       <el-form-item label="Address">
@@ -57,17 +61,38 @@ const tableData = reactive([
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles",
   },
-])
+]);
 
-const form = reactive({
+let form = reactive({})
+const globalIndex = ref(-1)
+const dialogFormVisible = ref(false)
 
-});
-
-const dialogFormVisible = ref(false);
-const save = () => {  
-  tableData.push(form)
-  dialogFormVisible = false
+const save = () => {
+  if(globalIndex.value>=0){
+    tableData[globalIndex.value] = form
+    globalIndex.value = -1
+  }else{
+    tableData.push(form);
+  }
+  dialogFormVisible.value = false
 }
+
+const HandleAdd = () => {
+  form = reactive({});
+  dialogFormVisible.value = true
+}
+
+const deleteRow = (index) => {
+tableData.splice(index,1)
+}
+
+const handleEdit = (row, index) => {  
+  const newObj = Object.assign({},row)
+  form = reactive(newObj)
+  globalIndex.value = index
+  dialogFormVisible.value = true
+}
+
 
 </script>
 
